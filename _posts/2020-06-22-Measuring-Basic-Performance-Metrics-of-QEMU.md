@@ -91,6 +91,12 @@ And the output is:
 
 ### Measuring with Callgrind
 
+The general command line form for running a program with Callgrind is the following:
+
+```bash
+valgrind --tool=callgrind [callgrind options] program [program options]
+```
+
 Using the same [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmakrs/coulomb/coulomb_double.c) program used with Perf, instructions and branch misses can be measured with Callgrind using the following command:
 
 ```bash
