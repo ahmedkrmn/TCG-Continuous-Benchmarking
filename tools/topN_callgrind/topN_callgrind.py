@@ -2,7 +2,7 @@
 
 #  Print the top N most executed functions in QEMU using callgrind.
 #  Syntax:
-#  topN_callgrind.py [-h] [-n <number of displayed top functions >  -- \
+#  topN_callgrind.py [-h] [-n] <number of displayed top functions>  -- \
 #           <qemu executable> [<qemu executable options>] \
 #           <target executable> [<target execurable options>]
 #
@@ -39,7 +39,7 @@ import sys
 
 # Parse the command line arguments
 parser = argparse.ArgumentParser(
-    usage='topN_callgrind.py [-h] [-n <number of displayed top functions >  -- '
+    usage='topN_callgrind.py [-h] [-n] <number of displayed top functions>  -- '
           '<qemu executable> [<qemu executable options>] '
           '<target executable> [<target executable options>]')
 
@@ -55,34 +55,35 @@ command = args.command
 top = args.top
 
 # Insure that valgrind is installed
-check_valgrind = subprocess.run(
-    ["which", "valgrind"], stdout=subprocess.DEVNULL)
-if check_valgrind.returncode:
+check_valgrind_presence = subprocess.run(["which", "valgrind"],
+                                         stdout=subprocess.DEVNULL)
+if check_valgrind_presence.returncode:
     sys.exit("Please install valgrind before running the script!")
 
 # Run callgrind
-callgrind = subprocess.run((["valgrind", "--tool=callgrind",
-                             "--callgrind-out-file=callgrind.data"] + command),
-                           stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+callgrind = subprocess.run((
+    ["valgrind", "--tool=callgrind", "--callgrind-out-file=/tmp/callgrind.data"]
+    + command),
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.PIPE)
 if callgrind.returncode:
     sys.exit(callgrind.stderr.decode("utf-8"))
 
-# Save callgrind_annotate output to tmp.callgrind.data
-with open("tmp.callgrind.data", "w") as output:
-    callgrind_annotate = subprocess.run(
-        ["callgrind_annotate", "callgrind.data"],
-        stdout=output,
-        stderr=subprocess.PIPE)
+# Save callgrind_annotate output to /tmp/callgrind_annotate.out
+with open("/tmp/callgrind_annotate.out", "w") as output:
+    callgrind_annotate = subprocess.run(["callgrind_annotate",
+                                         "/tmp/callgrind.data"],
+                                        stdout=output,
+                                        stderr=subprocess.PIPE)
     if callgrind_annotate.returncode:
-        os.unlink('callgrind.data')
+        os.unlink('/tmp/callgrind.data')
         output.close()
-        os.unlink('tmp.callgrind.data')
+        os.unlink('/tmp/callgrind_annotate.out')
         sys.exit(callgrind_annotate.stderr.decode("utf-8"))
-
 
 # Read the callgrind_annotate output to callgrind_data[]
 callgrind_data = []
-with open('tmp.callgrind.data', 'r') as data:
+with open('/tmp/callgrind_annotate.out', 'r') as data:
     callgrind_data = data.readlines()
 
 # Line number with the total number of instructions
@@ -108,10 +109,10 @@ number_of_top_functions = (top if number_of_functions >
 top_functions = callgrind_data[first_func_line:
                                first_func_line + number_of_top_functions]
 
-# Print information headers
+# Print table header
 print('{:>4}  {:>10}  {:<30}  {}\n{}  {}  {}  {}'.format('No.',
                                                          'Percentage',
-                                                         'Name',
+                                                         'Function Name',
                                                          'Source File',
                                                          '-' * 4,
                                                          '-' * 10,
@@ -127,13 +128,13 @@ for (index, function) in enumerate(top_functions, start=1):
     function_percentage = (function_instructions /
                            total_number_of_instructions)*100
     # Get function name and source files path
-    function_source_path, function_name = function_data[1].split(':')
+    function_source_file, function_name = function_data[1].split(':')
     # Print extracted data
     print('{:>4}  {:>9.3f}%  {:<30}  {}'.format(index,
                                                 round(function_percentage, 3),
                                                 function_name,
-                                                function_source_path))
+                                                function_source_file))
 
 # Remove intermediate files
-os.unlink('callgrind.data')
-os.unlink('tmp.callgrind.data')
+os.unlink('/tmp/callgrind.data')
+os.unlink('/tmp/callgrind_annotate.out')

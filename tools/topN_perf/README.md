@@ -4,16 +4,16 @@ Easily detect QEMU runtime hotspots by printing the most executed functions when
 
 ### Usage
 
-Assume that you're testing against an arm executable of the [Coulomb benchmark](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmakrs/coulomb).
+Assume that you're testing against an x86_64 executable of the [Coulomb benchmark](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmakrs/coulomb).
 
 ```bash
-topN_perf.py -n 20 -- qemu-arm coulomb_double-arm
+./topN_perf.py -- <qemu-build>/x86_64-linux-user/qemu-x86_64 coulomb_double -n 30000
 ```
 
 ### Output
 
 ```
- No.  Percentage  Name                       Caller
+ No.  Percentage  Name                       Invoked by
 ----  ----------  -------------------------  -------------------------
    1      16.25%  float64_mul                qemu-x86_64
    2      12.01%  float64_sub                qemu-x86_64
