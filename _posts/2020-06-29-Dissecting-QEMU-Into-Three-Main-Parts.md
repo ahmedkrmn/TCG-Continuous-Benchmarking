@@ -326,25 +326,27 @@ There is one thing intriguing about mips targets: big endian versions are faster
 
 Results:
 
-```
- No.  Percentage  Function Name                   Source File
-----  ----------  ------------------------------  ------------------------------
-   1     21.974%  soft_f64_addsub                 <qemu>/fpu/softfloat.c
-   2     16.445%  soft_f64_mul                    <qemu>/fpu/softfloat.c
-   3     10.643%  0x0000000008664000              ???
-   4      6.685%  ieee_ex_to_mips.part.2          <qemu>/target/mips/fpu_helper.c
-   5      6.340%  soft_f64_mul                    <qemu>/include/fpu/softfloat-macros.h
-   6      3.312%  float64_add                     <qemu>/fpu/softfloat.c
-   7      3.284%  helper_float_mul_d              <qemu>/target/mips/fpu_helper.c
-   8      3.274%  soft_f64_addsub                 <qemu>/include/qemu/bitops.h
-   9      3.197%  helper_float_madd_d             <qemu>/target/mips/fpu_helper.c
-  10      3.011%  helper_float_sub_d              <qemu>/target/mips/fpu_helper.c
-  11      2.753%  helper_float_add_d              <qemu>/target/mips/fpu_helper.c
-  12      2.676%  soft_f64_mul                    <qemu>/include/qemu/bitops.h
-  13      2.454%  soft_f64_addsub                 <qemu>/include/fpu/softfloat-macros.h
-  14      1.606%  float64_sub                     <qemu>/fpu/softfloat.c
-  15      1.190%  helper_cmp_d_lt                 <qemu>/target/mips/fpu_helper.c
-```
+<pre class="highlight" style="font-size:14.6205px">
+  <code>
+   No.  Percentage  Function Name                   Source File
+  ----  ----------  ------------------------------  ------------------------------
+     1     21.974%  soft_f64_addsub                 &lt;qemu&gt;/fpu/softfloat.c
+     2     16.445%  soft_f64_mul                    &lt;qemu&gt;/fpu/softfloat.c
+     3     10.643%  0x0000000008664000              ???
+     4      6.685%  ieee_ex_to_mips.part.2          &lt;qemu&gt;/target/mips/fpu_helper.c
+     5      6.340%  soft_f64_mul                    &lt;qemu&gt;/include/fpu/softfloat-macros.h
+     6      3.312%  float64_add                     &lt;qemu&gt;/fpu/softfloat.c
+     7      3.284%  <b>helper_float_mul_d</b>              &lt;qemu&gt;/target/mips/fpu_helper.c
+     8      3.274%  soft_f64_addsub                 &lt;qemu&gt;/include/qemu/bitops.h
+     9      3.197%  <b>helper_float_madd_d</b>             &lt;qemu&gt;/target/mips/fpu_helper.c
+    10      3.011%  <b>helper_float_sub_d</b>              &lt;qemu&gt;/target/mips/fpu_helper.c
+    11      2.753%  <b>helper_float_add_d</b>              &lt;qemu&gt;/target/mips/fpu_helper.c
+    12      2.676%  soft_f64_mul                    &lt;qemu&gt;/include/qemu/bitops.h
+    13      2.454%  soft_f64_addsub                 &lt;qemu&gt;/include/fpu/softfloat-macros.h
+    14      1.606%  float64_sub                     &lt;qemu&gt;/fpu/softfloat.c
+    15      1.190%  <b>helper_cmp_d_lt</b>                 &lt;qemu&gt;/target/mips/fpu_helper.c
+  </code>
+</pre>
 
 And for mipsel target:
 
@@ -354,25 +356,27 @@ And for mipsel target:
 
 Results:
 
-```
- No.  Percentage  Function Name                   Source File
-----  ----------  ------------------------------  ------------------------------
-   1     26.635%  soft_f64_addsub                 <qemu>/fpu/softfloat.c
-   2     14.656%  soft_f64_mul                    <qemu>/fpu/softfloat.c
-   3     10.012%  0x0000000008664000              ???
-   4      7.559%  ieee_ex_to_mips.part.2          <qemu>/target/mips/fpu_helper.c
-   5      5.650%  soft_f64_mul                    <qemu>/include/fpu/softfloat-macros.h
-   6      5.584%  helper_float_mul_d              <qemu>/target/mips/fpu_helper.c
-   7      4.603%  helper_float_add_d              <qemu>/target/mips/fpu_helper.c
-   8      3.929%  soft_f64_addsub                 <qemu>/include/qemu/bitops.h
-   9      3.299%  soft_f64_addsub                 <qemu>/include/fpu/softfloat-macros.h
-  10      3.247%  helper_float_sub_d              <qemu>/target/mips/fpu_helper.c
-  11      2.385%  soft_f64_mul                    <qemu>/include/qemu/bitops.h
-  12      1.060%  helper_cmp_d_lt                 <qemu>/target/mips/fpu_helper.c
-  13      1.036%  float64_lt                      <qemu>/fpu/softfloat.c
-  14      0.946%  float64_add                     <qemu>/fpu/softfloat.c
-  15      0.901%  soft_f64_div                    <qemu>/fpu/softfloat.c
-```
+<pre class="highlight" style="font-size: 14.6205px;">
+  <code>
+   No.  Percentage  Function Name                   Source File
+  ----  ----------  ------------------------------  ------------------------------
+     1     26.635%  soft_f64_addsub                 &lt;qemu&gt;/fpu/softfloat.c
+     2     14.656%  soft_f64_mul                    &lt;qemu&gt;/fpu/softfloat.c
+     3     10.012%  0x0000000008664000              ???
+     4      7.559%  ieee_ex_to_mips.part.2          &lt;qemu&gt;/target/mips/fpu_helper.c
+     5      5.650%  soft_f64_mul                    &lt;qemu&gt;/include/fpu/softfloat-macros.h
+     6      5.584%  <b>helper_float_mul_d</b>              &lt;qemu&gt;/target/mips/fpu_helper.c
+     7      4.603%  <b>helper_float_add_d</b>              &lt;qemu&gt;/target/mips/fpu_helper.c
+     8      3.929%  soft_f64_addsub                 &lt;qemu&gt;/include/qemu/bitops.h
+     9      3.299%  soft_f64_addsub                 &lt;qemu&gt;/include/fpu/softfloat-macros.h
+    10      3.247%  <b>helper_float_sub_d</b>              &lt;qemu&gt;/target/mips/fpu_helper.c
+    11      2.385%  soft_f64_mul                    &lt;qemu&gt;/include/qemu/bitops.h
+    12      1.060%  <b>helper_cmp_d_lt</b>                 &lt;qemu&gt;/target/mips/fpu_helper.c
+    13      1.036%  float64_lt                      &lt;qemu&gt;/fpu/softfloat.c
+    14      0.946%  float64_add                     &lt;qemu&gt;/fpu/softfloat.c
+    15      0.901%  soft_f64_div                    &lt;qemu&gt;/fpu/softfloat.c
+  </code>
+</pre>
 
 From the two lists above, it is visible that, for some strange reasons that are beyond QEMU, big endian mips target uses multiply-add instructions, while little endian mips target uses separate multiply instruction and separate add instructions. This can be concluded from the presence of `helper_float_madd_d` in big endian case only. This means that corresponding helpers are different. Moreover, the number of executed helpers will be also different - less helpers will be called in big endian case. Numerically, the outcome will be accurate in both cases, however, the number of invoked helpers matters, resulting in better overall performance of big endian mips target.
 
@@ -388,25 +392,27 @@ m68k instruction set is not a RISC set in a strict sense. For example it contain
 
 Results:
 
-```
- No.  Percentage  Function Name                   Source File
-----  ----------  ------------------------------  ------------------------------
-   1     21.128%  roundAndPackFloatx80            <qemu>/fpu/softfloat.c
-   2      6.646%  floatx80_mul                    <qemu>/fpu/softfloat.c
-   3      5.904%  0x00000000082db000              ???
-   4      5.542%  floatx80_mul                    <qemu>/include/fpu/softfloat-macros.h
-   5      3.958%  subFloatx80Sigs                 <qemu>/fpu/softfloat.c
-   6      3.780%  helper_ftst                     <qemu>/target/m68k/fpu_helper.c
-   7      3.739%  float64_to_floatx80             <qemu>/fpu/softfloat.c
-   8      3.528%  addFloatx80Sigs                 <qemu>/fpu/softfloat.c
-   9      2.447%  floatx80_div                    <qemu>/include/fpu/softfloat-macros.h
-  10      2.437%  floatx80_mul                    <qemu>/include/fpu/softfloat.h
-  11      2.136%  subFloatx80Sigs                 <qemu>/include/fpu/softfloat-macros.h
-  12      2.072%  roundAndPackFloat64             <qemu>/fpu/softfloat.c
-  13      1.900%  floatx80_sin                    <qemu>/target/m68k/softfloat.c
-  14      1.890%  helper_ftst                     <qemu>/include/fpu/softfloat.h
-  15      1.884%  floatx80_cos                    <qemu>/target/m68k/softfloat.c
-```
+<pre class="highlight" style="font-size: 14.6205px;">
+  <code>
+   No.  Percentage  Function Name                   Source File
+  ----  ----------  ------------------------------  ------------------------------
+     1     21.128%  roundAndPackFloatx80            &lt;qemu&gt;/fpu/softfloat.c
+     2      6.646%  floatx80_mul                    &lt;qemu&gt;/fpu/softfloat.c
+     3      5.904%  0x00000000082db000              ???
+     4      5.542%  floatx80_mul                    &lt;qemu&gt;/include/fpu/softfloat-macros.h
+     5      3.958%  subFloatx80Sigs                 &lt;qemu&gt;/fpu/softfloat.c
+     6      3.780%  helper_ftst                     &lt;qemu&gt;/target/m68k/fpu_helper.c
+     7      3.739%  float64_to_floatx80             &lt;qemu&gt;/fpu/softfloat.c
+     8      3.528%  addFloatx80Sigs                 &lt;qemu&gt;/fpu/softfloat.c
+     9      2.447%  floatx80_div                    &lt;qemu&gt;/include/fpu/softfloat-macros.h
+    10      2.437%  floatx80_mul                    &lt;qemu&gt;/include/fpu/softfloat.h
+    11      2.136%  subFloatx80Sigs                 &lt;qemu&gt;/include/fpu/softfloat-macros.h
+    12      2.072%  roundAndPackFloat64             &lt;qemu&gt;/fpu/softfloat.c
+    13      1.900%  <b>floatx80_sin</b>                    &lt;qemu&gt;/target/m68k/softfloat.c
+    14      1.890%  helper_ftst                     &lt;qemu&gt;/include/fpu/softfloat.h
+    15      1.884%  <b>floatx80_cos</b>                    &lt;qemu&gt;/target/m68k/softfloat.c
+  </code>
+</pre>
 
 m68k target has fewer instructions to translate, but some of its instruction require complex softfloat helpers (displayed above), whereas mips, for example, has much more instruction to translate and execute, but they are, in great majority, basically, additions and multiplications, that require relatively simple softfloat helpers.
 
