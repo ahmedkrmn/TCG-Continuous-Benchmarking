@@ -56,7 +56,7 @@ Callgrind is a part of [Valgrind](http://www.valgrind.org/). Valgrind is an inst
 
 2. Setup and build QEMU from source code. The methods presented here work for both debug and non-debug QEMU builds, but it makes the most sense to apply them on non-debug builds. In this report (and in all other reports in this series), QEMU source tree root directory will be denoted as `<qemu>`, and QEMU build directory as `<qemu-build>`.
 
-3. Download the [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmakrs/coulomb/coulomb_double.c) benchmark which is used in this report. It computes the net forces acting on all **n** electrons randomly scattered across a 1m x 1m surface. **n** can be passed as a command line argument or, if not, it defaults to 1000.
+3. Download the [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmarks/coulomb/coulomb_double.c) benchmark which is used in this report. It computes the net forces acting on all **n** electrons randomly scattered across a 1m x 1m surface. **n** can be passed as a command line argument or, if not, it defaults to 1000.
 
 4. Compile the program:
 
@@ -97,7 +97,7 @@ The general command line form for running a program with Callgrind is the follow
 valgrind --tool=callgrind [callgrind options] program [program options]
 ```
 
-Using the same [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmakrs/coulomb/coulomb_double.c) program used with Perf, instructions and branch misses can be measured with Callgrind using the following command:
+Using the same [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmarks/coulomb/coulomb_double.c) program used with Perf, instructions and branch misses can be measured with Callgrind using the following command:
 
 ```bash
 valgrind --tool=callgrind --branch-sim=yes <qemu-build>/x86_64-linux-user/qemu-x86_64 coulomb_double
@@ -442,7 +442,7 @@ In general, the more important factor while judging usability of a performance t
 
 Stability can be defined as the ability to provide nearly identical results with each run of the profiler.
 
-A simple Python script is used to compare the stability of Valgrind vs Perf, but first, the [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmakrs/coulomb) program is executed with Callgrind once and with Perf three times.
+A simple Python script is used to compare the stability of Valgrind vs Perf, but first, the [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmarks/coulomb) program is executed with Callgrind once and with Perf three times.
 This time, the `-r, --repeat <n>` Perf flag is utilized. It repeats Perf execution `n` times and prints the average of all events.
 
 ### Stability Experiment

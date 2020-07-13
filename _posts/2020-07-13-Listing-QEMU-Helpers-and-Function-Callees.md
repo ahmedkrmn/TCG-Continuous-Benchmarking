@@ -54,7 +54,7 @@ Both scripts are available on the project [GitHub page](https://github.com/ahmed
 
 ### Examples of Usage
 
-Compile the [coulomb_float](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmakrs/coulomb/coulomb_float.c) benchmark on an x86_64 Linux machine:
+Compile the [coulomb_float](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/master/benchmarks/coulomb/coulomb_float.c) benchmark on an x86_64 Linux machine:
 
 ```bash
 gcc -static -O2 coulomb_double.c -o coulomb_double -lm

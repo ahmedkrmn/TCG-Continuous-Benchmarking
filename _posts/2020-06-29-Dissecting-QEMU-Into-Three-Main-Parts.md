@@ -34,7 +34,7 @@ The script is available on the project [GitHub page](https://github.com/ahmedkrm
 
 ### Example of Usage
 
-Using the same [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmakrs/coulomb) benchmark from the previous report, it can be compiled on an x86_64 Linux machine using:
+Using the same [Coulomb](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmarks/coulomb) benchmark from the previous report, it can be compiled on an x86_64 Linux machine using:
 
 ```bash
 gcc -static -O2 coulomb_double.c -o coulomb_double -lm
