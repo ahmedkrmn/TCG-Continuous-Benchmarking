@@ -56,6 +56,16 @@ All benchmarks are available on the project [GitHub page](https://github.com/ahm
 
 QEMU performance is presented in terms of the number of instructions for each target when executed under the current QEMU master. This number is compared to yesterday's results and the reference version results which are both displayed in percentages.
 
+**Required Settings:**
+
+Update the [`GMAIL_USER`](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/blob/242613d274ba96648f0f286367ca714166ba3a54/tools/qemu_nightly_tests/scripts/send_email.py#L31) object in `send_email.py` with your credentials.
+
+**Running the System:**
+
+```bash
+python run_nightly_tests.py
+```
+
 ### Terminology
 
 **Reference Version:**
