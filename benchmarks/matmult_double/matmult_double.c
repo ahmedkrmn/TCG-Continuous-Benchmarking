@@ -42,6 +42,8 @@ void main(int argc, char *argv[])
     size_t k;
     int32_t matrix_size = DEFAULT_MATRIX_SIZE;
     int32_t option;
+    double range_factor = 100.0 / (double)(RAND_MAX);
+
 
     /* Parse command line options */
     while ((option = getopt(argc, argv, "n:")) != -1) {
@@ -89,8 +91,8 @@ void main(int argc, char *argv[])
     srand(1);
     for (i = 0; i < matrix_size; i++) {
         for (j = 0; j < matrix_size; j++) {
-            matrix_a[i][j] = (100.0 * (double)rand()) / (double)RAND_MAX;
-            matrix_b[i][j] = (100.0 * (double)rand()) / (double)RAND_MAX;
+            matrix_a[i][j] = range_factor * (double)rand();
+            matrix_b[i][j] = range_factor * (double)rand();
         }
     }
 

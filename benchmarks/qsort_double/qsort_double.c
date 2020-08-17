@@ -51,6 +51,7 @@ void main(int argc, char *argv[])
     double *array_to_be_sorted;
     int32_t array_len = DEFAULT_ARRAY_LEN;
     int32_t option;
+    double range_factor = UPPER_LIMIT / (double)(RAND_MAX);
 
     /* Parse command line options */
     while ((option = getopt(argc, argv, "n:")) != -1) {
@@ -86,8 +87,7 @@ void main(int argc, char *argv[])
     /* Populate the_array with random numbers */
     srand(1);
     for (size_t i = 0; i < array_len; i++) {
-        array_to_be_sorted[i] = (UPPER_LIMIT * (double)rand()) /
-                                (double)RAND_MAX;
+        array_to_be_sorted[i] = range_factor * (double)rand();
     }
 
     /* Sort the_array using qsort() */
