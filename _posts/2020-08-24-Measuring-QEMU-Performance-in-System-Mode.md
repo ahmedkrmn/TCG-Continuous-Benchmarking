@@ -77,7 +77,7 @@ wget http://ftp.nl.debian.org/debian/dists/buster/main/installer-mips/current/im
 wget http://ftp.nl.debian.org/debian/dists/buster/main/installer-mips/current/images/malta/netboot/vmlinux-4.19.0-10-4kc-malta
 # Emulate Debian
 <qemu-system-build>/mips-softmmu/qemu-system-mips \
--m 1024 -M Malta -kernel vmlinux-4.19.0-10-4kc-malta -initrd initrd.gz \
+-m 1024 -M malta -kernel vmlinux-4.19.0-10-4kc-malta -initrd initrd.gz \
 -append "root=/dev/ram"
 ```
 
@@ -90,7 +90,7 @@ wget http://ftp.nl.debian.org/debian/dists/buster/main/installer-mipsel/current/
 wget http://ftp.nl.debian.org/debian/dists/buster/main/installer-mipsel/current/images/malta/netboot/vmlinux-4.19.0-10-4kc-malta
 # Emulate Debian
 <qemu-system-build>/mipsel-softmmu/qemu-system-mipsel \
--m 1024 -M Malta -kernel vmlinux-4.19.0-10-4kc-malta -initrd initrd.gz \
+-m 1024 -M malta -kernel vmlinux-4.19.0-10-4kc-malta -initrd initrd.gz \
 -append "root=/dev/ram"
 ```
 
