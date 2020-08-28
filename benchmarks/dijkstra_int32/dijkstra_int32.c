@@ -37,9 +37,9 @@
 #define MAX_NODE_COUNT          10000
 
 
-int32_t closest_index(int32_t count, int32_t* distances, bool* flags) 
-{ 
-    int32_t closest; 
+int32_t closest_index(int32_t count, int32_t *distances, bool *flags)
+{
+    int32_t closest;
     int32_t minimum = INT_MAX;
 
     for (size_t i = 0; i < count; i++) {
@@ -47,10 +47,10 @@ int32_t closest_index(int32_t count, int32_t* distances, bool* flags)
             closest = i;
             minimum = distances[i];
         }
-    }  
+    }
 
-    return closest; 
-} 
+    return closest;
+}
 
 /**
  * Calculate the shortest distances from the source node using Dijkstra method.
@@ -62,10 +62,10 @@ int32_t closest_index(int32_t count, int32_t* distances, bool* flags)
  * @param (in) source  Source node.
  * @param (in) matrix  Distance matrix.
  */
-void find_shortest_distances(int32_t* distances, int32_t* via, int32_t* eccent,
-                             int32_t count, int32_t source, int32_t** matrix)
+void find_shortest_distances(int32_t *distances, int32_t *via, int32_t *eccent,
+                             int32_t count, int32_t source, int32_t **matrix)
 {
-    bool* flags;
+    bool *flags;
 
     flags = (bool *)malloc(count * sizeof(bool));
 
@@ -78,9 +78,9 @@ void find_shortest_distances(int32_t* distances, int32_t* via, int32_t* eccent,
     via[source] = source;
 
     for (size_t i = 0; i < count - 1; i++) {
-        int32_t closest = closest_index(count, distances, flags); 
-        flags[closest] = true; 
-        for (size_t j = 0; j < count; j++) { 
+        int32_t closest = closest_index(count, distances, flags);
+        flags[closest] = true;
+        for (size_t j = 0; j < count; j++) {
             if ((!flags[j]) &&
                     (matrix[closest][j]) &&
                     (distances[closest] != INT_MAX) &&
@@ -88,7 +88,7 @@ void find_shortest_distances(int32_t* distances, int32_t* via, int32_t* eccent,
                 distances[j] = distances[closest] + matrix[closest][j];
                 via[j] = closest;
             }
-        } 
+        }
     }
 
     *eccent = 0;
@@ -99,14 +99,14 @@ void find_shortest_distances(int32_t* distances, int32_t* via, int32_t* eccent,
     }
 
     free(flags);
-} 
+}
 
 
-void main (int argc, char* argv[])
+void main(int argc, char *argv[])
 {
-    int32_t** distance_matrix;
-    int32_t* shortest_distances;
-    int32_t* via_node;
+    int32_t **distance_matrix;
+    int32_t *shortest_distances;
+    int32_t *via_node;
     int32_t node_count = DEFAULT_NODE_COUNT;
     int32_t source_node = 0;
     int32_t node_eccentricity = 0;
@@ -165,26 +165,26 @@ void main (int argc, char* argv[])
     find_shortest_distances(shortest_distances, via_node, &node_eccentricity,
                             node_count, source_node, distance_matrix);
 
-    /* Control printing */    
+    /* Control printing */
     printf("CONTROL RESULT:\n");
-    printf(" Distance matrix (top left part):\n"); 
+    printf(" Distance matrix (top left part):\n");
     for (size_t i = 0; i < 3; i++) {
         for (size_t j = 0; j < 3; j++) {
-            printf("    %6d", distance_matrix[i][j]); 
+            printf("    %6d", distance_matrix[i][j]);
         }
         printf("\n");
     }
     printf(" Source: %d (eccentricity: %d)\n",
-           source_node, node_eccentricity); 
-    printf(" Destination   Distance   Via Node\n"); 
+           source_node, node_eccentricity);
+    printf(" Destination   Distance   Via Node\n");
     for (size_t i = 0; i < 3; i++) {
         printf("  %5d          %3d        %4d\n",
-               i, shortest_distances[i], via_node[i]); 
+               i, shortest_distances[i], via_node[i]);
     }
 
     /* Free all previously allocated space */
     for (size_t i = 0; i < node_count; i++) {
-		free(distance_matrix[i]);
+        free(distance_matrix[i]);
     }
     free(distance_matrix);
     free(shortest_distances);

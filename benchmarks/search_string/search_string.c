@@ -108,4 +108,3 @@ void main(int argc, char *argv[])
     printf("CONTROL RESULT:\n");
     printf(" Found %d times. Not found %d times.\n", found_cnt, not_found_cnt);
 }
- 
