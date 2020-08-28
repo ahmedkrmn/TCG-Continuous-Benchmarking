@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Core script for performing nightly performance tests on QEMU.
 
@@ -31,6 +33,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from typing import Dict, List, Optional, Union
 
 
@@ -137,16 +140,34 @@ def git_checkout(commit: str, qemu_path: str) -> None:
         print(datetime.datetime.utcnow().isoformat(),
               "- Pulling the latest changes from QEMU master",
               file=sys.stderr, flush=True)
-        pull_latest = subprocess.run(["git",
-                                      "pull",
-                                      "origin",
-                                      "master"],
-                                     cwd=qemu_path,
-                                     stdout=subprocess.DEVNULL,
-                                     check=False)
-        if pull_latest.returncode:
-            clean_exit(qemu_path,
-                       "Failed to pull latest changes in QEMU master.")
+        # Try pulling the latest changes.
+        # Limit the number of failed trials to 10.
+        failure_count, failure_limit = 0, 10
+        while True:
+            pull_latest = subprocess.run(["git",
+                                          "pull",
+                                          "origin",
+                                          "master"],
+                                         cwd=qemu_path,
+                                         stdout=subprocess.DEVNULL,
+                                         check=False)
+            if pull_latest.returncode:
+                failure_count += 1
+                if failure_count == failure_limit:
+                    print(datetime.datetime.utcnow().isoformat(),
+                          "- Trial {}/{}: Failed to pull QEMU".format(
+                              failure_count, failure_limit),
+                          file=sys.stderr, flush=True)
+                    clean_exit(qemu_path, "")
+                else:
+                    print(datetime.datetime.utcnow().isoformat(),
+                          "- Trial {}/{}: Failed to pull QEMU"
+                          " ... retrying again in a minute!".format(
+                              failure_count, failure_limit),
+                          file=sys.stderr, flush=True)
+                    time.sleep(60)
+            else:
+                break
 
 
 def git_clone(qemu_path: str) -> None:
@@ -156,13 +177,32 @@ def git_clone(qemu_path: str) -> None:
     Parameters:
     qemu_path (str): Absolute path to clone the QEMU repo to
     """
-    clone_qemu = subprocess.run(["git",
-                                 "clone",
-                                 "https://git.qemu.org/git/qemu.git",
-                                 qemu_path],
-                                check=False)
-    if clone_qemu.returncode:
-        clean_exit(qemu_path, "Failed to clone QEMU!")
+    # Try cloning QEMU.
+    # Limit the number of failed trials to 10.
+    failure_count, failure_limit = 0, 10
+    while True:
+        clone_qemu = subprocess.run(["git",
+                                     "clone",
+                                     "https://git.qemu.org/git/qemu.git",
+                                     qemu_path],
+                                    check=False)
+        if clone_qemu.returncode:
+            failure_count += 1
+            if failure_count == failure_limit:
+                print(datetime.datetime.utcnow().isoformat(),
+                      "- Trial {}/{}: Failed to clone QEMU".format(
+                          failure_count, failure_limit),
+                      file=sys.stderr, flush=True)
+                clean_exit(qemu_path, "")
+            else:
+                print(datetime.datetime.utcnow().isoformat(),
+                      "- Trial {}/{}: Failed to clone QEMU"
+                      " ... retrying again in a minute!".format(
+                          failure_count, failure_limit),
+                      file=sys.stderr, flush=True)
+                time.sleep(60)
+        else:
+            break
 
 
 def build_qemu(qemu_path: str, git_tag: str, targets: List[str]) -> None:
@@ -684,13 +724,13 @@ def main():
     Output on STDERR must be redirected to either /dev/null or to a log file.
 
     Syntax:
-        python nightly_tests_core.py [-h] [-r REF]
+        nightly_tests_core.py [-h] [-r REF]
     Optional arguments:
         -h, --help            Show this help message and exit
         -r REF, --reference REF
                             Reference QEMU version - Default is v5.1.0
     Example of usage:
-        python nightly_tests_core.py -r v5.1.0 2>log.txt
+        nightly_tests_core.py -r v5.1.0 2>log.txt
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--reference", dest="ref",
