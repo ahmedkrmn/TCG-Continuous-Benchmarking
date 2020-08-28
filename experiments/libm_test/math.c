@@ -407,7 +407,7 @@ TEST_MATH_FUNCTION_L_L(erfcl)
 TEST_MATH_FUNCTION_L_L(lgammal)
 TEST_MATH_FUNCTION_L_L(tgammal)
 
-void main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     /******************************** Parse the command line flags ********************************/
     int c;
     long selected_iterations = -1;

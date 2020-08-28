@@ -46,7 +46,7 @@ static int compare(const void *a, const void *b)
     return 0;
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int32_t *array_to_be_sorted;
     int32_t array_len = DEFAULT_ARRAY_LEN;

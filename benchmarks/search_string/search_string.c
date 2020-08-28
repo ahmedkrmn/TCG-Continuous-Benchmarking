@@ -51,7 +51,7 @@ static void gen_random_string(char *s, const int len)
     s[len - 1] = 0;
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char haystack[HAYSTACK_LEN];
     const char needle[] = "aaa ";

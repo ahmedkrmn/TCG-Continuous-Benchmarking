@@ -68,7 +68,7 @@ static void gen_random_string(char *s, const int len)
     s[len - 1] = 0;
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct StringStruct strings_to_be_sorted[NUMBER_OF_RANDOM_STRINGS];
     int32_t repetition_count = DEFAULT_REPETITION_COUNT;

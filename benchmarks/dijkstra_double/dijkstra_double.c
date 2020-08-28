@@ -103,7 +103,7 @@ void find_shortest_distances(double *distances, int32_t *via, double *eccent,
 }
 
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     double **distance_matrix;
     double *shortest_distances;

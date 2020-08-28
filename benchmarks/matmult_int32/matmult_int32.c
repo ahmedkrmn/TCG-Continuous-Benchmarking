@@ -32,7 +32,7 @@
 #define MIN_MATRIX_SIZE         2
 #define MAX_MATRIX_SIZE         200000
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int32_t **matrix_a;
     int32_t **matrix_b;
