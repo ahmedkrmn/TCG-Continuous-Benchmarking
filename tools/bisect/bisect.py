@@ -1,42 +1,27 @@
 #!/usr/bin/env python3
 
-#  Locate the commit that caused a performance degradation or improvement in
-#  QEMU using the git bisect command (binary search).
-#
-#  Syntax:
-#  bisect.py [-h] -s,--start START [-e,--end END] [-q,--qemu QEMU] \
-#  --target TARGET --tool {perf,callgrind} -- \
-#  <target executable> [<target executable options>]
-#
-#  [-h] - Print the script arguments help message.
-#  -s,--start START - First commit hash in the search range
-#  [-e,--end END] - Last commit hash in the search range
-#             (default: Latest commit)
-#  [-q,--qemu QEMU] - QEMU path.
-#              (default: Path of a GitHub QEMU clone)
-#  --target TARGET - QEMU target name
-#  --tool {perf,callgrind} - Underlying tool used for measurements
+"""
+Locate the commit that caused a performance degradation or improvement in
+QEMU using the git bisect command (binary search).
 
-#  Example of usage:
-#  bisect.py -s fdd76fecdde --target ppc --tool perf -- coulomb_double-ppc -n100
-#
-#  This file is a part of the project "TCG Continuous Benchmarking".
-#
-#  Copyright (C) 2020  Ahmed Karaman <ahmedkhaledkaraman@gmail.com>
-#  Copyright (C) 2020  Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program. If not, see <https://www.gnu.org/licenses/>.
+This file is a part of the project "TCG Continuous Benchmarking".
+
+Copyright (C) 2020  Ahmed Karaman <ahmedkhaledkaraman@gmail.com>
+Copyright (C) 2020  Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""
 
 import argparse
 import multiprocessing
@@ -46,19 +31,23 @@ import shutil
 import subprocess
 import sys
 
+from typing import List
 
-############################ GIT WRAPPERS ############################
-def git_bisect(qemu_path, command, args=None):
+
+# --------------------------- GIT WRAPPERS --------------------------
+def git_bisect(qemu_path: str, qemu_build_path: str, command: str,
+               args: List[str] = None) -> str:
     """
     Wrapper function for running git bisect.
 
     Parameters:
     qemu_path (str): QEMU path
-    command (str):   bisect command (start|fast|slow|reset)
-    args (list):     Optional arguments
+    qemu_build_path (str): Path to the build directory with configuration files
+    command (str): bisect command (start|fast|slow|reset)
+    args (list): Optional arguments
 
     Returns:
-    (str):           bisect stdout
+    (str): git bisect stdout.
     """
     process = ["git", "bisect", command]
     if args:
@@ -66,48 +55,53 @@ def git_bisect(qemu_path, command, args=None):
     bisect = subprocess.run(process,
                             cwd=qemu_path,
                             stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
+                            stderr=subprocess.PIPE,
+                            check=False)
     if bisect.returncode:
-        sys.exit(bisect.stderr.decode("utf-8"))
+        clean_exit(qemu_build_path, bisect.stderr.decode("utf-8"))
+
     return bisect.stdout.decode("utf-8")
 
 
-def git_checkout(commit, qemu_path):
+def git_checkout(commit: str, qemu_path: str, qemu_build_path: str) -> None:
     """
     Wrapper function for checking out a given git commit.
 
     Parameters:
-    commit (str):    Commit hash of the desired commit
+    commit (str): Commit hash of a git commit
     qemu_path (str): QEMU path
+    qemu_build_path (str): Path to the build directory with configuration files
     """
     checkout_commit = subprocess.run(["git",
                                       "checkout",
                                       commit],
                                      cwd=qemu_path,
                                      stdout=subprocess.DEVNULL,
-                                     stderr=subprocess.PIPE)
+                                     stderr=subprocess.PIPE,
+                                     check=False)
     if checkout_commit.returncode:
-        sys.exit(checkout_commit.stderr.decode("utf-8"))
+        clean_exit(qemu_build_path, checkout_commit.stderr.decode("utf-8"))
 
 
-def git_clone(qemu_path):
+def git_clone(qemu_path: str) -> None:
     """
     Wrapper function for cloning QEMU git repo from GitHub.
 
     Parameters:
-    qemu_path (str): QEMU path
+    qemu_path (str): Path to clone the QEMU repo to
     """
     clone_qemu = subprocess.run(["git",
                                  "clone",
                                  "https://github.com/qemu/qemu.git",
                                  qemu_path],
-                                stderr=subprocess.STDOUT)
+                                stderr=subprocess.STDOUT,
+                                check=False)
     if clone_qemu.returncode:
         sys.exit("Failed to clone QEMU!")
-######################################################################
+# -------------------------------------------------------------------
 
 
-def check_requirements(tool):
+def check_requirements(tool: str) -> None:
     """
     Verify that all script requirements are installed (perf|callgrind & git).
 
@@ -116,14 +110,16 @@ def check_requirements(tool):
     """
     if tool == "perf":
         check_perf_installation = subprocess.run(["which", "perf"],
-                                                 stdout=subprocess.DEVNULL)
+                                                 stdout=subprocess.DEVNULL,
+                                                 check=False)
         if check_perf_installation.returncode:
             sys.exit("Please install perf before running the script.")
 
         # Insure user has previllage to run perf
         check_perf_executability = subprocess.run(["perf", "stat", "ls", "/"],
                                                   stdout=subprocess.DEVNULL,
-                                                  stderr=subprocess.DEVNULL)
+                                                  stderr=subprocess.DEVNULL,
+                                                  check=False)
         if check_perf_executability.returncode:
             sys.exit("""
         Error:
@@ -144,47 +140,67 @@ def check_requirements(tool):
         """)
     elif tool == "callgrind":
         check_valgrind_installation = subprocess.run(["which", "valgrind"],
-                                                     stdout=subprocess.DEVNULL)
+                                                     stdout=subprocess.DEVNULL,
+                                                     check=False)
         if check_valgrind_installation.returncode:
-            sys.exit(
-                "Please install valgrind before running the script.")
+            sys.exit("Please install valgrind before running the script.")
 
     # Insure that git is installed
     check_git_installation = subprocess.run(["which", "git"],
-                                            stdout=subprocess.DEVNULL)
+                                            stdout=subprocess.DEVNULL,
+                                            check=False)
     if check_git_installation.returncode:
         sys.exit("Please install git before running the script.")
 
 
-def make(qemu_build_path):
+def clean_exit(qemu_build_path: str, error_message: str) -> None:
+    """
+    Clean up intermediate files and exit.
+
+    Parameters:
+    qemu_build_path (str): Path to the build directory with configuration files
+    error_message (str): Error message to display after exiting
+    """
+    shutil.rmtree(qemu_build_path)
+    sys.exit(error_message)
+
+
+def make(qemu_build_path: str) -> None:
     """
     Build QEMU by running the Makefile.
 
     Parameters:
-    qemu_build_path (str): Path to the build directory with configuration files.
+    qemu_build_path (str): Path to the build directory with configuration files
     """
     run_make = subprocess.run(["make",
                                "-j",
                                str(multiprocessing.cpu_count())],
                               cwd=qemu_build_path,
                               stdout=subprocess.DEVNULL,
-                              stderr=subprocess.PIPE)
+                              stderr=subprocess.PIPE,
+                              check=False)
     if run_make.returncode:
-        sys.exit(run_make.stderr.decode("utf-8"))
+        clean_exit(qemu_build_path, run_make.stderr.decode("utf-8"))
 
 
-def measure_instructions(tool, qemu_exe_path, command):
+def measure_instructions(tool: str, qemu_build_path: str, target: str,
+                         command: List[str]) -> int:
     """
-    Measure the number of instructions when running an executable with QEMU.
+    Measure the number of instructions when running an program with QEMU.
 
     Parameters:
-    tool (str):          Tool used for the measurement (perf or callgrind)
-    qemu_exe_path (str): os.path to the QEMU executable of the equivalent target
-    command (list):      executable os.path and arguments
+    tool (str): Tool used for the measurement (perf|callgrind)
+    qemu_build_path (str): Path to the build directory with configuration files
+    target (str): QEMU target
+    command (list): Program path and arguments
 
     Returns:
-    (int):               Number of instructions
+    (int): Number of instructions.
     """
+    qemu_exe_path = os.path.join(qemu_build_path,
+                                 "{}-linux-user".format(target),
+                                 "qemu-{}".format(target))
+    instructions = 0
     if tool == "perf":
         run_perf = subprocess.run((["perf",
                                     "stat",
@@ -195,12 +211,14 @@ def measure_instructions(tool, qemu_exe_path, command):
                                     qemu_exe_path]
                                    + command),
                                   stdout=subprocess.DEVNULL,
-                                  stderr=subprocess.PIPE)
+                                  stderr=subprocess.PIPE,
+                                  check=False)
         if run_perf.returncode:
-            sys.exit(run_perf.stderr.decode("utf-8"))
+            clean_exit(qemu_build_path, run_perf.stderr.decode("utf-8"))
+
         else:
             perf_output = run_perf.stderr.decode("utf-8").split(" ")
-            return int(perf_output[0])
+            instructions = int(perf_output[0])
 
     elif tool == "callgrind":
         with tempfile.NamedTemporaryFile() as tmpfile:
@@ -211,19 +229,46 @@ def measure_instructions(tool, qemu_exe_path, command):
                                              qemu_exe_path]
                                             + command),
                                            stdout=subprocess.DEVNULL,
-                                           stderr=subprocess.PIPE)
+                                           stderr=subprocess.PIPE,
+                                           check=False)
         if run_callgrind.returncode:
-            sys.exit(run_callgrind.stderr.decode("utf-8"))
+            clean_exit(qemu_build_path, run_callgrind.stderr.decode("utf-8"))
+
         else:
             callgrind_output = run_callgrind.stderr.decode("utf-8").split("\n")
-            return int(callgrind_output[8].split(" ")[-1])
+            instructions = int(callgrind_output[8].split(" ")[-1])
+
+    return instructions
 
 
 def main():
+    """
+    Parse the command line arguments then start the execution.
+
+    Syntax:
+        bisect.py [-h] -s,--start START [-e,--end END] [-q,--qemu QEMU] \
+        --target TARGET --tool {perf,callgrind} -- \
+        <target executable> [<target executable options>]
+
+    Arguments:
+        [-h] - Print the script arguments help message
+        -s,--start START - First commit hash in the search range
+        [-e,--end END] - Last commit hash in the search range
+                (default: Latest commit)
+        [-q,--qemu QEMU] - QEMU path.
+                    (default: Path to a GitHub QEMU clone)
+        --target TARGET - QEMU target name
+        --tool {perf,callgrind} - Underlying tool used for measurements
+
+    Example of usage:
+        bisect.py --start=fdd76fecdd --qemu=/path/to/qemu --target=ppc \
+        --tool=perf coulomb_double-ppc -n 1000
+    """
+
     # Parse the command line arguments
     parser = argparse.ArgumentParser(
         usage="bisect.py [-h] -s,--start START [-e,--end END] [-q,--qemu QEMU]"
-        "--target TARGET --tool {perf,callgrind} -- "
+        " --target TARGET --tool {perf,callgrind} -- "
         "<target executable> [<target executable options>]")
 
     parser.add_argument("-s", "--start", dest="start", type=str, required=True,
@@ -264,44 +309,44 @@ def main():
 
     # Create the build directory
     qemu_build_path = os.path.join(qemu_path, "tmp-build-gcc")
+
     if not os.path.exists(qemu_build_path):
         os.mkdir(qemu_build_path)
     else:
-        sys.exit("A build directory with the same name (tmp-build-gcc) used in "
-                 "the script is already in the provided QEMU path.")
-
-    qemu_exe_path = os.path.join(qemu_build_path,
-                                 "{}-linux-user".format(target),
-                                 "qemu-{}".format(target))
+        sys.exit("A build directory with the same name (tmp-build-gcc) used in"
+                 " the script is already in the provided QEMU path.")
 
     # Configure QEMU
     configure = subprocess.run(["../configure",
                                 "--target-list={}-linux-user".format(target)],
                                cwd=qemu_build_path,
                                stdout=subprocess.DEVNULL,
-                               stderr=subprocess.PIPE)
+                               stderr=subprocess.PIPE,
+                               check=False)
     if configure.returncode:
-        sys.exit(configure.stderr.decode("utf-8"))
+        clean_exit(qemu_build_path, configure.stderr.decode("utf-8"))
 
     # Do performance measurements for the start commit
-    git_checkout(start_commit, qemu_path)
+    git_checkout(start_commit, qemu_path, qemu_build_path)
     make(qemu_build_path)
     start_commit_instructions = measure_instructions(tool,
-                                                     qemu_exe_path,
+                                                     qemu_build_path,
+                                                     target,
                                                      command)
     print("{:<30} {}".format("Start Commit Instructions:",
                              format(start_commit_instructions, ",")))
 
     # Do performance measurements for the end commit
-    git_checkout(end_commit, qemu_path)
+    git_checkout(end_commit, qemu_path, qemu_build_path)
     make(qemu_build_path)
     end_commit_instructions = measure_instructions(tool,
-                                                   qemu_exe_path,
+                                                   qemu_build_path,
+                                                   target,
                                                    command)
-
     print("{:<30} {}".format("End Commit Instructions:",
                              format(end_commit_instructions, ",")))
 
+    # Calculate performance difference between start and end commits
     performance_difference = \
         (start_commit_instructions - end_commit_instructions) / \
         max(end_commit_instructions, start_commit_instructions) * 100
@@ -310,28 +355,35 @@ def main():
                              performance_change +
                              str(round(abs(performance_difference), 3))+"%"))
 
+    # Set the custom terms used for progressing in "git bisect"
     term_old = "fast" if performance_difference < 0 else "slow"
     term_new = "slow" if term_old == "fast" else "fast"
 
     # Start git bisect
-    git_bisect(qemu_path, "start", [
-               "--term-old", term_old, "--term-new", term_new])
+    git_bisect(qemu_path, qemu_build_path, "start",
+               ["--term-old", term_old, "--term-new", term_new])
     # Set start commit state
-    git_bisect(qemu_path, term_old, [start_commit])
+    git_bisect(qemu_path, qemu_build_path, term_old, [start_commit])
     # Set end commit state
-    bisect_output = git_bisect(qemu_path, term_new, [end_commit])
+    bisect_output = git_bisect(
+        qemu_path, qemu_build_path, term_new, [end_commit])
+    # Print estimated bisect steps
     print("\n{:<30} {}\n".format(
         "Estimated Number of Steps:", bisect_output.split()[9]))
 
-    # Initialize bisect_count to track bisect numbers
+    # Initialize bisect_count to track the number of performed
     bisect_count = 1
 
     while True:
-        print("**************BISECT STEP {}**************".format(bisect_count))
+        print("**************BISECT STEP {}**************".
+              format(bisect_count))
 
         make(qemu_build_path)
 
-        instructions = measure_instructions(tool, qemu_exe_path, command)
+        instructions = measure_instructions(tool,
+                                            qemu_build_path,
+                                            target,
+                                            command)
         # Find the difference between the current instructions and start/end
         # instructions.
         diff_end = abs(instructions - end_commit_instructions)
@@ -346,9 +398,10 @@ def main():
             bisect_command = term_new
 
         print("{:<20} {}".format("Instructions:", format(instructions, ",")))
-        print("{:<20} {}".format("Status:", "{} commit".format(bisect_command)))
+        print("{:<20} {}".format("Status:", "{} commit".
+                                 format(bisect_command)))
 
-        bisect_output = git_bisect(qemu_path, bisect_command)
+        bisect_output = git_bisect(qemu_path, qemu_build_path, bisect_command)
 
         # Continue if still bisecting,
         # else, print result and break.
@@ -362,7 +415,7 @@ def main():
         bisect_count += 1
 
     # Reset git bisect
-    git_bisect(qemu_path, "reset")
+    git_bisect(qemu_path, qemu_build_path, "reset")
 
     # Delete temp build directory
     shutil.rmtree(qemu_build_path)
