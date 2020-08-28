@@ -3,12 +3,12 @@ layout: post
 title: Measuring QEMU Performance in System Mode - Part Two
 tags: ['System Mode', 'Perf', 'Top N', 'Basic Metrics']
 subtitle: Inspecting QEMU System Emulation Performance for Five Different Targets
-excerpt: In part two of the final TCG Continuos Benchmarking report, the same procedures introduced in part one are used for inspecting the performance of QEMU system mode emulation. The only difference is instead of emulating the same OS for all targets, different images where selected from a Qemu-devel thread and the official QEMU documentation.
+excerpt: In part two of the final TCG Continuous Benchmarking report, the same procedures introduced in part one are used for inspecting the performance of QEMU system mode emulation. The only difference is instead of emulating the same OS for all targets, different images where selected from a Qemu-devel thread and the official QEMU documentation.
 ---
 
 ## Intro
 
-In part two of the final TCG Continuos Benchmarking report, the same procedures introduced in [part one](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-QEMU-Performance-in-System-Mode/) are used for inspecting the performance of QEMU system mode emulation. The only difference is instead of emulating the same OS for all targets, different images where selected from this [Qemu-devel thread](https://www.mail-archive.com/qemu-devel@nongnu.org/msg604682.html) and the official [QEMU documentation](https://www.qemu.org/docs/master/system/).
+In part two of the final TCG Continuous Benchmarking report, the same procedures introduced in [part one](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-QEMU-Performance-in-System-Mode/) are used for inspecting the performance of QEMU system mode emulation. The only difference is instead of emulating the same OS for all targets, different images where selected from this [Qemu-devel thread](https://www.mail-archive.com/qemu-devel@nongnu.org/msg604682.html) and the official [QEMU documentation](https://www.qemu.org/docs/master/system/).
 
 For each of the five targets used in this report (arm, hppa, m68k, mipsel, and sh4), the source of the used emulation instructions is mentioned. This is followed by a snippet for fetching the required files and starting the system emulation.
 
