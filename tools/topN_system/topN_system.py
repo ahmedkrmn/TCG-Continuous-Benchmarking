@@ -116,8 +116,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
         if PERF_REPORT.returncode:
             sys.exit(PERF_REPORT.stderr.decode("utf-8"))
 
-    # Read the reported data to FUNCTIONS[]
-    FUNCTIONS = []
+    # Save the reported data to FUNCTIONS[] and INSTRUCTIONS
     with open(REPORT_PATH, "r") as data:
         LINES = data.readlines()
         # Read the number of instructions
@@ -133,10 +132,10 @@ with tempfile.TemporaryDirectory() as tmpdir:
 
 
 # Limit the number of top functions to "TOP"
-NO_TOP_FUNCTION = TOP if len(FUNCTIONS) > TOP else len(FUNCTIONS)
+NO_TOP_FUNCTIONS = TOP if len(FUNCTIONS) > TOP else len(FUNCTIONS)
 
 # Store the data of the top functions in TOP_FUNCTIONS[]
-TOP_FUNCTIONS = FUNCTIONS[:NO_TOP_FUNCTION]
+TOP_FUNCTIONS = FUNCTIONS[:NO_TOP_FUNCTIONS]
 
 # Print total instructions
 print("\nNumber of instructions:", format(INSTRUCTIONS, ","))
