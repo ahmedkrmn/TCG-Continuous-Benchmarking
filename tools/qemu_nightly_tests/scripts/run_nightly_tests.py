@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Entry point script for running nightly performance tests on QEMU.
 
@@ -53,8 +55,7 @@ NIGHTLY_TESTS_ARGUMENTS = sys.argv[1:]
 
 # Start the nightly test
 START_EPOCH = time.time()
-RUN_NIGHTLY_TESTS = subprocess.run(["python",
-                                    NIGHTLY_TESTS_CORE_PATH,
+RUN_NIGHTLY_TESTS = subprocess.run([NIGHTLY_TESTS_CORE_PATH,
                                     *NIGHTLY_TESTS_ARGUMENTS],
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
@@ -94,6 +95,10 @@ print("{:<17}: {}\n{:<17}: {}\n{:<17}: {}\n".
              EXECUTION_TIME), file=OUTPUT)
 print("{:<17}: {}\n".format("Status", STATUS), file=OUTPUT)
 
+if STATUS == "SUCCESS":
+    print("Note:\nChanges denoted by '-----' are less than 0.01%.\n",
+          file=OUTPUT)
+
 # Print the nightly test stdout (main output)
 print(RUN_NIGHTLY_TESTS.stdout.decode("utf-8"), file=OUTPUT)
 
@@ -120,7 +125,7 @@ OUTPUT.close()
 # Send the nightly test results email to the QEMU mailing list
 while True:
     try:
-        send_email("Nightly Performance Tests - {}".format(TEST_DATE),
+        send_email("[REPORT] Nightly Performance Tests - {}".format(TEST_DATE),
                    ["qemu-devel@nongnu.org"], HTML_MESSAGE)
     except Exception:  # pylint: disable=W0703
         # Wait for a minute then retry sending
