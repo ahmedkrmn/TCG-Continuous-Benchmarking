@@ -2,6 +2,8 @@
 
 Easily detect QEMU runtime hotspots by printing the most executed functions when running a given program.
 
+For more details on how the script works and for usage examples, please check [Report 1 - Measuring Basic Performance Metrics of QEMU](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-Basic-Performance-Metrics-of-QEMU/).
+
 ### Usage
 
 Assume that you're testing against an x86_64 executable of the [Coulomb benchmark](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/benchmakrs/coulomb).
