@@ -1,4 +1,4 @@
-### Finding the Most Executed Functions in System Mode
+## Get The N Most Executed Functions in QEMU System Mode
 
 The script takes only one optional argument `-n` to specify the number of top functions to display. If it's not provided, the script defaults to 25.
 
@@ -43,3 +43,5 @@ Number of instructions: 136,660,616,915
   24       0.62%  init_ts_info
   25       0.60%  regime_el
 ```
+
+For more usage examples, please refer to [Report 9 - Measuring QEMU Performance in System Mode](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-QEMU-Performance-in-System-Mode/).
