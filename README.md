@@ -23,21 +23,56 @@ The website offers a [Search page](https://ahmedkrmn.github.io/TCG-Continuous-Be
 **Submitted Reports:**
 
 - [Report 1 - Measuring Basic Performance Metrics of QEMU](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-Basic-Performance-Metrics-of-QEMU/)
+
+  The first report of the TCG Continuous Benchmarking project presents two Linux profiling tools - Perf and Callgrind. It gives an overview of their setup, usage, pros and cons. The motivation is to provide a better understanding of them. This way, you will be able to make decisions regarding their usage in a better and easier way. You will also learn two ways of finding top N most executed QEMU functions of your scenario, without even having to know absolutely any detail of the used profiling tools!
+
   - **Tools:** [topN_perf.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/topN_perf) and [topN_callgrind.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/topN_callgrind)
+
 - [Report 2 - Dissecting QEMU Into Three Main Parts](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Dissecting-QEMU-Into-Three-Main-Parts/)
+
+  The previous report presented an overview of measuring basic performance metrics of QEMU, and one of these metrics, naturally, was the total number of executed host instructions. This report further utilizes Callgrind to break down that total number into numbers that correspond to three main parts of QEMU operation; code generation, JIT-ed code execution, and helpers execution.
+
   - **Tools:** [dissect.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/dissect_qemu_instructions)
+
 - [Report 3 - QEMU 5.0 and 5.1-pre-soft-freeze Dissect Comparison](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/QEMU-5.0-and-5.1-pre-soft-freeze-Dissect-Comparison/)
+
+  As we get into the soft freeze period starting July 7th, it is necessary to have a reference of whether there were some performance improvements or degradations across targets between QEMU 5.0 and the current version of QEMU. The report dissects the execution of 17 different QEMU targets and compares the results obtained from running with QEMU 5.0 and QEMU 5.1-pre-soft-freeze.
+
 - [Report 4 - Listing QEMU Helpers and Function Callees](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Listing-QEMU-Helpers-and-Function-Callees/)
+
+  This report builds up on the previous one by presenting two new Python scripts that facilitates the process of displaying the executed QEMU helpers and function callees without the need of setting up KCachegrind. The PowerPC performance degradation is then re-analysed using the new scripts. The report also introduces the analysis of three other targets, hppa and sh4, explaining why they were not affected the same way as ppc, and mips, explaining why it showed an increase in performance.
+
   - **Tools:** [list_helpers.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/list_helpers_and_fn_callees) and [list_fn_callees.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/list_helpers_and_fn_callees)
+
 - [Report 5 - Finding Commits Affecting QEMU Performance](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Finding-Commits-Affecting-QEMU-Performance/)
+
+  This report concludes a mini series of three reports that presented a comparison between QEMU 5.0 and QEMU 5.1-pre-soft-freeze. The first report in the series presented the comparison results as well as an analysis of the performance degradation introduced in the PowerPC targets using KCachegrind. The second report presented two new scripts for inspecting performance changes as well as the analysis of three other targets. Now it's time to find the commits responsible for the performance changes discussed in the two previous reports. This report provides a new tool for performing the process of locating those commits automatically.
+
   - **Tools:** [bisect.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/bisect)
-- [Report 6 - Performance Comparison of Two QEMU Builds](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Performance-Comparison-of-Two-QEMU-Builds/)
+
+- [Report 6 - Performance Comparison of Two QEMU Builds (Compilers and QEMU Performance)](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Performance-Comparison-of-Two-QEMU-Builds/)
+
+  This report presents a performance comparison between two different QEMU builds, GCC and Clang. To provide a variety of test workloads, five new benchmarks are also introduced in the report. For each benchmark, the performance of QEMU is compared across the GCC and Clang builds for seventeen different targets.
+
 - [Report 7 - Measuring QEMU Emulation Efficiency](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-QEMU-Emulation-Efficiency/)
+
+  In this report, a method for measuring the TCG emulation efficiency of QEMU is presented. This is achieved for seventeen different targets by comparing the number of guest instructions (running the program natively on the target) and the number of QEMU instructions (running the program through QEMU). For each target, the ratio between these two numbers presents a rough estimation of the emulation efficiency for that target.
+
 - [Report 8 - QEMU Nightly Performance Tests](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/QEMU-Nightly-Performance-Tests/)
+
+  QEMU currently lacks a system for measuring the performance of targets automatically. The previous reports introduced different tools and methods for locating performance regressions, but all of them had to be manually executed by the user when needed. This report presents a new nightly tests system that runs automatically each night. After the execution is completed, it sends a report to the QEMU mailing list with the performance measurements of seventeen different QEMU targets, and how these measurements compare to previously obtained ones.
+
   - **Tools:** [Nightly Tests System](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/qemu_nightly_tests)
+
 - [Report 9 - Measuring QEMU Performance in System Mode](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-QEMU-Performance-in-System-Mode/)
+
+  The final report of the TCG Continuos Benchmarking project introduces basic performance measurements for QEMU system mode emulation. Boot-up time and number of executed instructions are compared for the emulation of five different targets when booting Debian 10.5. The report also presents a new tool for finding the topN most executed functions in the emulation process.
+
   - **Tools:** [topN_system.py](https://github.com/ahmedkrmn/TCG-Continuous-Benchmarking/tree/master/tools/topN_system)
+
 - [Report 10 - Measuring QEMU Performance in System Mode - Part Two](https://ahmedkrmn.github.io/TCG-Continuous-Benchmarking/Measuring-QEMU-Performance-in-System-Mode-Part-Two/)
+
+  In part two of the final TCG Continuous Benchmarking report, the same procedures introduced in part one are used for inspecting the performance of QEMU system mode emulation. The only difference is instead of emulating the same OS for all targets, different images where selected from a Qemu-devel thread and the official QEMU documentation.
 
 ---
 
