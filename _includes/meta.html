@@ -17,10 +17,13 @@
     {% endif %}
 
     {% if page.image %}
-    <meta property="og:image" content="{{ site.url }}{{ page.image }}"/>
-    <meta property="twitter:image" content="{{ site.url }}{{ page.image }}"/>
+    <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}{{ page.image }}"/>
+    <meta property="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ page.image }}"/>
     {% else %}
-    <meta property="og:image" content="{{ site.url }}{{ site.avatar }}"/>
-    <meta property="twitter:image" content="{{ site.url }}{{ site.avatar }}"/>
+    <meta property="og:image" content="{{ site.url }}{{ site.baseurl }}{{ site.share_preview }}"/>
+    <meta property="twitter:image" content="{{ site.url }}{{ site.baseurl }}{{ site.share_preview }}"/>
     {% endif %}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TCG Continuos Benchmarking" />
+    <meta name="twitter:description" content="Performance analysis and benchmarking reports of the QEMU emulator." />
     <meta property="og:site_name" content="Ahmed Karaman - Software Engineer"/>

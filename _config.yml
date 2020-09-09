@@ -13,6 +13,7 @@ description: Performance analysis and benchmarking reports of the QEMU emulator
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/Qemu_logo.png
+share_preview: /images/Qemu_logo_share.png
 
 #
 # Flags below are optional
@@ -53,7 +54,7 @@ enforce_ssl: https://ahmedkrmn.github.io
 # (http://yourusername.github.io/repository-name)
 # and NOT your User repository (http://yourusername.github.io)
 # then add in the baseurl here, like this: "/repository-name"
-baseurl: "/TCG-Continuous-Benchmarking"
+baseurl: '/TCG-Continuous-Benchmarking'
 
 #
 # !! You don't need to change any of the configuration flags below !!
@@ -72,7 +73,7 @@ kramdown:
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     # Use existing pygments syntax highlighting css
-    css_class: "highlight"
+    css_class: 'highlight'
 
 # Set the Sass partials directory, as we're using @imports
 sass:
@@ -85,7 +86,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
 
-include: ["_pages"]
+include: ['_pages']
 
 paginate: 6
 paginate_path: /page:num/
