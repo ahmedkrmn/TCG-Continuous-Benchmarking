@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Performance Comparison of Two QEMU Builds
+title: Performance Comparison of Two QEMU Builds (Compilers and QEMU Performance)
 subtitle: GCC VS Clang
 tags: [GCC, Clang, list_helpers, list_fn_callees]
 excerpt: This report presents a performance comparison between two different QEMU builds, GCC and Clang. To provide a variety of test workloads, five new benchmarks are also introduced in the report. For each benchmark, the performance of QEMU is compared across the two builds for seventeen different targets.

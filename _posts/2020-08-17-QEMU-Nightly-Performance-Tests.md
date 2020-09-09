@@ -2,7 +2,7 @@
 layout: post
 title: QEMU Nightly Performance Tests
 subtitle: Automatically Measuring the Performance Impact of Daily QEMU Changes
-excerpt: QEMU currently lacks a system for measuring the performance of targets automatically. The previous devises introduced different tools and methods for locating performance regressions, but all of them had to be manually executed by the user when needed. This report presents a new nightly tests system that runs automatically each night. After the execution is completed, it sends a report to the QEMU mailing list with the performance measurements of seventeen different QEMU targets, and how these measurements compare to previously obtained ones.
+excerpt: QEMU currently lacks a system for measuring the performance of targets automatically. The previous reports introduced different tools and methods for locating performance regressions, but all of them had to be manually executed by the user when needed. This report presents a new nightly tests system that runs automatically each night. After the execution is completed, it sends a report to the QEMU mailing list with the performance measurements of seventeen different QEMU targets, and how these measurements compare to previously obtained ones.
 ---
 
 ## Intro
